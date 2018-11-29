@@ -1,13 +1,15 @@
 <?php
 
-defined( 'ABSPATH' ) or	die( 'Cheatin&#8217; uh?' );
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly.
 
 
 class gestsup_options {
 
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'register_setting' ) );
-		add_action('admin_init', array($this,'gestsup_mysql'));
+		add_action( 'admin_init', array( $this, 'gestsup_mysql' ) );
 
 	}
 
@@ -22,19 +24,18 @@ class gestsup_options {
 		<?php
 	}
 
-	public static function gestsup_options()
-	{ ?>
+	public static function gestsup_options() { ?>
 		<form method="post" action="options.php">
-			<?php settings_fields('gestsup_API') ?>
-			<?php do_settings_sections('gestsup_options_API') ?>
-			<?php submit_button( __( 'Save', 'wp-gestsup-connector' ),'','tech' ) ?>
+			<?php settings_fields( 'gestsup_API' ) ?>
+			<?php do_settings_sections( 'gestsup_options_API' ) ?>
+			<?php submit_button( __( 'Save', 'wp-gestsup-connector' ), '', 'tech' ) ?>
 		</form>
 	<?php }
 
-	public static function gestsup_reset(){ ?>
+	public static function gestsup_reset() { ?>
 		<form method="post" action="options.php">
-			<?php settings_fields('gestsup_delete') ?>
-			<?php do_settings_fields('gestsup_delete_data') ?>
+			<?php settings_fields( 'gestsup_delete' ) ?>
+			<?php do_settings_fields( 'gestsup_delete_data' ) ?>
 		</form>
 	<?php }
 
@@ -54,19 +55,20 @@ class gestsup_options {
 		), 'gestsup_options_settings' );
 
 
-
 		add_settings_section( 'gestsup_API_options', __( 'Save your GestSup defaults infos', 'wp-gestsup-connector' ), array(
 			$this,
 			'section_API_html'
 		), 'gestsup_options_API' );
 
-		add_settings_section('reset', __('reset options', 'wp-gestsup-connector'), array($this, 'del_option_html'), 'gestsup_delete' );
+		add_settings_section( 'reset', __( 'reset options', 'wp-gestsup-connector' ), array(
+			$this,
+			'del_option_html'
+		), 'gestsup_delete' );
 
 		add_settings_field( 'gestsup_host', __( 'Host Name', 'wp-gestsup-connector' ), array(
 			$this,
 			'host_html'
 		), 'gestsup_options_settings', 'gestsup_options' );
-
 
 
 		add_settings_field( 'gestsup_dbname', __( 'DB Name', 'wp-gestsup-connector' ), array(
@@ -87,8 +89,8 @@ class gestsup_options {
 			'support_allow_not_registred_html'
 		), 'gestsup_options_API', 'gestsup_API_options' );
 
-		$allow_unregistred = get_option('gestsup_admin_mail');
-		if(isset($allow_unregistred) && $allow_unregistred ==='1') {
+		$allow_unregistred = get_option( 'gestsup_admin_mail' );
+		if ( isset( $allow_unregistred ) && $allow_unregistred === '1' ) {
 			add_settings_field( 'gestsup_admin_support', __( 'Support mail address', 'wp-gestsup-connector' ), array(
 				$this,
 				'support_mail_html'
@@ -129,42 +131,47 @@ class gestsup_options {
 	}
 
 
-
 	public function section_API_html() {
 		_e( 'Save your GestSup by defaults infos', 'wp-gestsup-connector' );
 
 	}
 
 	public function host_html() { ?>
-		<input type="text" name="gestsup_host" placeholder="db host" value="<?php echo get_option('gestsup_host'); ?>"/>
+		<input type="text" name="gestsup_host" placeholder="db host"
+		       value="<?php echo get_option( 'gestsup_host' ); ?>"/>
 	<?php }
 
 	public function dbname_html() {
 		?>
-		<input type="text" name="gestsup_dbname" placeholder="db name" value="<?php echo get_option('gestsup_dbname');?>"/>
+		<input type="text" name="gestsup_dbname" placeholder="db name"
+		       value="<?php echo get_option( 'gestsup_dbname' ); ?>"/>
 		<?php
 	}
 
-	public function dbuser_html() {?>
-		<input type="text" name="gestsup_user" placeholder="db user" value="<?php echo get_option('gestsup_user'); ?>"/>
-		<?php }
-
+	public function dbuser_html() { ?>
+		<input type="text" name="gestsup_user" placeholder="db user"
+		       value="<?php echo get_option( 'gestsup_user' ); ?>"/>
+	<?php }
 
 
 	public function dbpass_html() {
 		?>
-		<input type="password" name="gestsup_pass" placeholder="db password" value="<?php //echo get_option('gestsup_pass'); ?>"/>
+		<input type="password" name="gestsup_pass" placeholder="db password"
+		       value="<?php //echo get_option('gestsup_pass'); ?>"/>
 		<?php
 	}
 
 	public function support_allow_not_registred_html() {
-		$allow_unregistred = get_option('gestsup_admin_mail'); ?>
-		<input type="checkbox" name="gestsup_admin_mail" value="1" <?php if(isset($allow_unregistred) && $allow_unregistred === '1') { echo 'checked'; } ?>>
+		$allow_unregistred = get_option( 'gestsup_admin_mail' ); ?>
+		<input type="checkbox" name="gestsup_admin_mail"
+		       value="1" <?php if ( isset( $allow_unregistred ) && $allow_unregistred === '1' ) {
+			echo 'checked';
+		} ?>>
 	<?php }
 
 	public function tech_html() {
-		$db          = $this->gestsup_mysql();
-		$t           = $db->query( " SELECT id,firstname, lastname FROM tusers WHERE profile = '4' or profile='0' or profile = '3' " );
+		$db = $this->gestsup_mysql();
+		$t = $db->query( " SELECT id,firstname, lastname FROM tusers WHERE profile = '4' or profile='0' or profile = '3' " );
 		$option_tech = get_option( 'gestsup_tech' );
 
 		?>
@@ -184,10 +191,12 @@ class gestsup_options {
 		<?php
 	}
 
-	public function support_mail_html(){
-		$allow_unregistred = get_option('gestsup_admin_mail');
-		if(isset($allow_unregistred) && $allow_unregistred ==='1'){ ?>
-		<input type="email" name="gestsup_admin_support" placeholder="<?php _e('Mail to support team','wp-gestsup-connector') ?>" value="<?php echo get_option('gestsup_admin_support'); ?>"/>
+	public function support_mail_html() {
+		$allow_unregistred = get_option( 'gestsup_admin_mail' );
+		if ( isset( $allow_unregistred ) && $allow_unregistred === '1' ) { ?>
+			<input type="email" name="gestsup_admin_support"
+			       placeholder="<?php _e( 'Mail to support team', 'wp-gestsup-connector' ) ?>"
+			       value="<?php echo get_option( 'gestsup_admin_support' ); ?>"/>
 
 		<?php }
 	}
@@ -202,15 +211,14 @@ class gestsup_options {
 	}
 
 
-
 	public static function gestsup_mysql() {
 
-		$server   = get_option( 'gestsup_host' );
-		$db       = get_option( 'gestsup_dbname' );
-		$user     = get_option( 'gestsup_user' );
+		$server = get_option( 'gestsup_host' );
+		$db     = get_option( 'gestsup_dbname' );
+		$user   = get_option( 'gestsup_user' );
 		//$password = wp_hash_password(get_option( 'gestsup_pass' ));
 		$password = get_option( 'gestsup_pass' );
-		$connect = 'nok';
+		$connect  = 'nok';
 
 		if ( empty( $server ) || empty( $db ) || empty ( $user ) || empty( $password ) ) {
 			return $connect;
@@ -222,13 +230,13 @@ class gestsup_options {
 		}
 	}
 
-	public static function  check_sql(){
+	public static function check_sql() {
 		$gestsup_mysql = self::gestsup_mysql();
-		$connexion = 0;
-		if($gestsup_mysql==='nok'){
-			return $connexion= __('Failed to connect to MySQL, please check your login credentials', 'wp-gestsup-connector');
-		}else{
-			return $connexion= __('Succesfully connected to the database', 'wp-gestsup-connector');
+		$connexion     = 0;
+		if ( $gestsup_mysql === 'nok' ) {
+			return $connexion = __( 'Failed to connect to MySQL, please check your login credentials', 'wp-gestsup-connector' );
+		} else {
+			return $connexion = __( 'Succesfully connected to the database', 'wp-gestsup-connector' );
 		}
 	}
 
