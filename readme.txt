@@ -2,9 +2,9 @@
 Contributors: sebastien@thivinfo.com
 Tags: gestsup, connector, helpdesk, ticket, support
 Donate link: https://www.paypal.me/sebastienserre
-Requires at least: 3.9
-Tested up to: 4.8
-Stable tag: 1.3.1
+Requires at least: 4.6
+Tested up to: 5.0
+Stable tag: 1.3.2
 
 WP GestSup Connector allow you to connect your WordPress Website to the helpdesk GestSup
 

@@ -32,10 +32,6 @@ class thfo_gestsup {
 
 	}
 
-	public static function thfo_textdomain() {
-		load_plugin_textdomain( 'wp-gestsup-connector', false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
-	}
-
 	public function add_admin_menu() {
 		add_menu_page( 'WP Gestsup', 'WP Gestsup', 'manage_options', 'wp-gestsup', array(
 			$this,
@@ -51,12 +47,7 @@ class thfo_gestsup {
 	public function menu_html() {
 		echo '<h1>' . get_admin_page_title() . '</h1>';
 		echo '<h2>' . _e( 'Hello, Many thanx to use this plugin', 'wp-gestsup-connector' ); ?> </h2>
-		<div class="ads" style="background: white; width: 50%; padding: 10px">
-			<p><?php _e( 'A Premium Version of this Plugin exists. It will do the same thing + creating the user in GestSUP if doesn\'t and then create the ticket', 'wp-gestsup-connector' ); ?></p>
-			<p>
-				<a href="https://www.thivinfo.com/en/downloads/wp-gestsup-connector-pro/"><?php _e( 'Download It!', 'wp-gestsup-connector' ); ?></a>
-			</p>
-		</div>
+
 		<h2><?php _e( 'If You Enjoy this plugin... encourage me!', 'wp-gestsup-connector' ) ?></h2>
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 			<input type="hidden" name="cmd" value="_s-xclick">
