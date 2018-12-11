@@ -6,6 +6,8 @@
  * Time: 14:26
  */
 
+use Elementor\Settings;
+
 add_shortcode( 'gestsup_add_ticket', 'add_ticket' );
 add_action( 'wp_loaded', 'thfo_add_ticket' );
 
@@ -28,26 +30,69 @@ function add_ticket() {
 		$mail      = $user_info->user_email;
 		$firstname = $user_info->user_firstname;
 		$lastname  = $user_info->user_lastname;
+
+		/**
+		 * Check languages
+		 */
+		if ( function_exists( 'get_user_locale' ) ) {
+			/**
+			 * From WP4.7
+			 */
+			$lang = get_user_locale( $user_info->ID );
+		} else {
+			$lang = $_POST['lang'];
+		}
 	} elseif ( isset( $_POST['mail'] ) ) {
 		$mail = $_POST['mail'];
 	} else {
 		$mail = '';
 	}
+
+	if ( ! empty( $_POST['firstname'] ) ) {
+		$firstname = $_POST['firstname'];
+	}
+
+	if ( ! empty( $_POST['lastname'] ) ) {
+		$lastname = $_POST['lastname'];
+	}
+
 	do_action( 'gestup-before-form' );
-	$form = '<form method="post" action="#">';
-	$form .= '<label for="mail">' . __( "Your email:", 'wp-gestsup-connector' ) . '</label>';
-	$form .= '<input type="email" name="mail" value="' . $mail . '" />';
-	$form .= '<p> <a href="' . wp_login_url( get_permalink() ) . '"> ' . __( 'Login', 'wp-gestsup-connector' ) . '</a></p>';
-	$form .= '<p>' . __( 'Let\'s creating a Gestsup account by choosing a password(if it does\'nt exist)', 'wp-gestsup-connector' ) . '</p>';
-	$form .= '<label for="password">' . __( "Choose your password", 'wp-gestsup-connector' ) . '</label>';
-	$form .= '<input type="password" name="password" >';
-	$form .= '<label for="firstname">' . __( "Firstname", 'wp-gestsup-connector' ) . '</label>';
-	$form .= '<input type="text" name="firstname" >';
-	$form .= '<label for="lastname">' . __( "lastname", 'wp-gestsup-connector' ) . '</label>';
-	$form .= '<input type="text" name="lastname" >';
-	$form .= '<label for="title">' . __( "Title:", 'wp-gestsup-connector' ) . '</label>';
-	$form .= '<input type="text" name="title" /><label for="ticket">' . __( "Ticket:", 'wp-gestsup-connector' ) . '</label>';
-	$form .= '<textarea name="ticket" cols="50" rows="10"></textarea>';
+
+	ob_start();
+	?>
+	<form method="post" action="#">
+
+	<label for="mail"><?php _e( "Your email:", 'wp-gestsup-connector' ) ?></label>
+	<input type="email" name="mail" value="<?php echo $mail ?>"/>
+	<?php
+	if ( ! is_user_logged_in() ) {
+		?>
+		<p><a href="<?php echo wp_login_url( get_permalink() ) ?>"> <?php _e( 'Login', 'wp-gestsup-connector' ) ?></a>
+		</p>
+		<p><?php _e( 'Let\'s creating a Gestsup account by choosing a password(if it does\'nt exist)', 'wp-gestsup-connector' ) ?></p>
+		<label for="password"><?php _e( "Choose your password", 'wp-gestsup-connector' ) ?></label>
+		<input type="password" name="password">
+	<?php } ?>
+	<label for="firstname"><?php _e( "Firstname", 'wp-gestsup-connector' ) ?></label>
+	<input type="text" name="firstname" value="<?php echo $firstname; ?>">
+	<label for="lastname"><?php _e( "lastname", 'wp-gestsup-connector' ) ?></label>
+	<input type="text" name="lastname" value="<?php echo $lastname; ?>">
+
+	<label for="lang"><?php _e( "Prefered language :", 'wp-gestsup-connector' ) ?></label>
+	<select name="lang">
+		<option value="fr_FR" <?php selected( 'fr_FR', $lang ); ?> ><?php _e( "French", 'wp-gestsup-connector' ) ?></option>
+		<option value="en_US" <?php selected( 'en_US', $lang ); ?>><?php _e( "English", 'wp-gestsup-connector' ) ?></option>
+		<option value="de_DE" <?php selected( 'de_DE', $lang ); ?>><?php _e( "German", 'wp-gestsup-connector' ) ?></option>
+		<option value="es_ES" <?php selected( 'es_ES', $lang ); ?>><?php _e( "Spanish", 'wp-gestsup-connector' ) ?></option>
+	</select>
+	<label for="title"><?php _e( "Title:", 'wp-gestsup-connector' ) ?></label>
+	<input type="text" name="title"/><label for="ticket"><?php _e( "Ticket:", 'wp-gestsup-connector' ) ?></label>
+	<textarea name="ticket" cols="50" rows="10"></textarea>
+	<?php
+
+
+	$form = ob_get_clean();
+
 
 	/**
 	 * If recaptcha is enabled in options, we add the integration code
@@ -206,6 +251,7 @@ function gestsup_create_user() {
 	$passwd    = $_POST['password'];
 	$firstname = $_POST['firstname'];
 	$lastname  = $_POST['lastname'];
+	$lang      = $_POST['lang'];
 	$v         = gestsup_options::gestsup_mysql();
 	$v->insert( 'tusers',
 		array(
@@ -215,6 +261,7 @@ function gestsup_create_user() {
 			'lastname'  => $lastname,
 			'firstname' => $firstname,
 			'profile'   => 2,
+			'language'  => $lang,
 		)
 
 	);
