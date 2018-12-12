@@ -3,7 +3,7 @@
 Plugin Name: Gestsup WP Connector
 Plugin URI: http://www.thivinfo.com
 Description: Connect your WordPress site to the helpdesk GestSup
-Version: 1.4.1
+Version: 1.4.2
 Author: Sébastien Serre
 Author URI: http://www.thivinfo.com
 License: GPL2
