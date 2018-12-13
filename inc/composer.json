@@ -1,0 +1,5 @@
+{
+    "require": {
+        "htmlburger/carbon-fields": "v3.0.0-rc.1"
+    }
+}

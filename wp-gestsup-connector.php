@@ -17,7 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 /* Include needed files*/
 include_once plugin_dir_path( __FILE__ ) . '/inc/admin/gestsup_options.php';
 include_once plugin_dir_path( __FILE__ ) . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
+include_once plugin_dir_path( __FILE__ ) . '/inc/admin/class-options.php';
 
+/**
+ * Define Constant
+ */
+define( 'WPGC_VERSION', '1.5.0' );
+define( 'WPGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'WPGC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WPGC_PLUGIN_DIR', untrailingslashit( WPGC_PLUGIN_PATH ) );
 
 /**
  * TODO: load conditionally on shortcode page
@@ -36,21 +44,4 @@ function enable_recaptcha() {
 
 function gestsup_include_google_repatcha() {
 	wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js' );
-}
-
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
-
-add_action( 'carbon_fields_register_fields', 'crb_attach_theme_options' );
-function crb_attach_theme_options() {
-	Container::make( 'theme_options', __( 'Theme Options' ) )
-	         ->add_fields( array(
-		         Field::make( 'text', 'crb_text', 'Text Field' ),
-	         ) );
-}
-
-add_action( 'after_setup_theme', 'crb_load' );
-function crb_load() {
-	require_once( plugin_dir_path( __FILE__ ) . '/inc/3rd-party/carbon-fields/vendor/autoload.php' );
-	\Carbon_Fields\Carbon_Fields::boot();
 }
