@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 include_once plugin_dir_path( __FILE__ ) . '/inc/admin/gestsup_options.php';
 include_once plugin_dir_path( __FILE__ ) . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
 include_once plugin_dir_path( __FILE__ ) . '/inc/admin/class-options.php';
+include_once plugin_dir_path( __FILE__ ) . '/inc/blocks/class-basic-block.php';
 
 /**
  * Define Constant
@@ -44,4 +45,10 @@ function enable_recaptcha() {
 
 function gestsup_include_google_repatcha() {
 	wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js' );
+}
+
+add_action( 'admin_print_styles', 'wpgc_load_style', 11, 1 );
+add_action( 'wp_enqueue_scripts', 'wpgc_load_style', 11, 1 );
+function wpgc_load_style(){
+	wp_enqueue_style( 'wpgc-style', WPGC_PLUGIN_URL . 'inc/blocks/wpgc-style.css' );
 }

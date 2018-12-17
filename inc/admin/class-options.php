@@ -10,7 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
-
+/**
+ * Class Options
+ *
+ * @package WPGestSup\Admin\Options
+ */
 class Options {
 
 	public function __construct() {
@@ -29,7 +33,7 @@ class Options {
 	}
 
 	public function wpgc_load() {
-		require_once( WPGC_PLUGIN_PATH . '/inc/vendor/autoload.php' );
+		require_once WPGC_PLUGIN_PATH . '/inc/vendor/autoload.php';
 		\Carbon_Fields\Carbon_Fields::boot();
 	}
 

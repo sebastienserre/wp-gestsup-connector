@@ -1,0 +1,14 @@
+.wp-gestsup-add-ticket-shortcode label {
+    width: 200px;
+    display: inline-block;
+}
+
+.wp-gestsup-title input {
+    width: calc(100% - 206px);
+}
+
+@media (max-width: 425px){
+    .wp-gestsup-title input {
+        width: 100%;
+    }
+}
