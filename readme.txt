@@ -42,6 +42,9 @@ Yes! the Google Recaptcha V2 ( invisible and Checkbox ) are allowed.
 == Screenshots ==
 1. GestSup Options
 2. GestSup Shortcode
+3. GestSup Databases options
+4. Gutenberg Block settings
+5. Gutenberg Block preview
 
 == Changelog ==
 = 1.5.0 = 20 dec 2018
