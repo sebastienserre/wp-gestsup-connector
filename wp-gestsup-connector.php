@@ -14,11 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly.
 
-/* Include needed files*/
-include_once plugin_dir_path( __FILE__ ) . '/inc/admin/gestsup_options.php';
-include_once plugin_dir_path( __FILE__ ) . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
-include_once plugin_dir_path( __FILE__ ) . '/inc/admin/class-options.php';
-include_once plugin_dir_path( __FILE__ ) . '/inc/blocks/class-basic-block.php';
+use Carbon_Fields\Container;
+use Carbon_Fields\Field;
+use Carbon_Fields\Helper\Helper;
 
 /**
  * Define Constant
@@ -28,6 +26,25 @@ define( 'WPGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPGC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPGC_PLUGIN_DIR', untrailingslashit( WPGC_PLUGIN_PATH ) );
 
+
+add_action( 'plugins_loaded', 'wpgc_load' );
+function wpgc_load() {
+	require_once WPGC_PLUGIN_PATH . '/inc/vendor/autoload.php';
+	\Carbon_Fields\Carbon_Fields::boot();
+}
+
+/* Include needed files*/
+require_once WPGC_PLUGIN_PATH . '/inc/admin/class-options.php';
+require_once WPGC_PLUGIN_PATH . '/inc/classes/class-gestsup-api.php';
+
+require_once WPGC_PLUGIN_PATH . '/inc/admin/gestsup_options.php';
+require_once WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
+
+require_once WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
+
+
+
+
 /**
  * TODO: load conditionally on shortcode page
  * Include Google Repactcha
@@ -36,9 +53,9 @@ define( 'WPGC_PLUGIN_DIR', untrailingslashit( WPGC_PLUGIN_PATH ) );
 
 add_action( 'init', 'enable_recaptcha' );
 function enable_recaptcha() {
-	$recaptcha_enable = get_option( 'gestsup_recaptcha_enable' );
+	$recaptcha_enable = get_option( '_wpgc_recaptcha' );
 
-	if ( $recaptcha_enable == 'on' ) {
+	if ( $recaptcha_enable == 'yes' ) {
 		add_action( 'wp_enqueue_scripts', 'gestsup_include_google_repatcha' );
 	}
 }

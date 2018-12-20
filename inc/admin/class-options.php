@@ -1,7 +1,4 @@
 <?php
-
-namespace WPGestSup\Admin\Options;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly.
@@ -12,6 +9,7 @@ use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 use Carbon_Fields\Helper\Helper;
 use function delete_option;
+use GestsupAPI;
 use function get_option;
 
 /**
@@ -23,11 +21,11 @@ class Options {
 
 	public function __construct() {
 		add_action( 'carbon_fields_register_fields', array( $this, 'wpgc_settings' ) );
-		add_action( 'plugins_loaded', array( $this, 'wpgc_load' ) );
 		add_action( 'admin_init', array( $this, 'wpgc_update_option' ) );
 	}
 
 	public function wpgc_settings() {
+		$tech = GestsupAPI::wpgc_get_tech();
 		Container::make( 'theme_options', __( 'Gestsup Connector' ) )
 		         ->set_page_parent( 'options-general.php' )
 		         ->add_tab( __( 'General', 'wp-gestsup-connector' ),
@@ -53,6 +51,8 @@ class Options {
 						              ),
 					              )
 				              ),
+				         Field::make( 'select', 'wpgc_tech', __( 'By default technician', 'wp-gestsup-connector' ) )
+				              ->set_options( $tech )
 			         )
 
 		         )
@@ -61,14 +61,9 @@ class Options {
 				Field::make( 'text', 'wpgc_gestsup_host', __( 'Host', 'wp-gestsup-connector' ) ),
 				Field::make( 'text', 'wpgc_gestsup_db', __( 'Database', 'wp-gestsup-connector' ) ),
 				Field::make( 'text', 'wpgc_gestsup_username', __( 'Username', 'wp-gestsup-connector' ) ),
-				Field::make( 'text', 'wpgc_gestsup_passwd', __( 'password', 'wp-gestsup-connector' ) ),
+				Field::make( 'text', 'wpgc_gestsup_passwd', __( 'Password', 'wp-gestsup-connector' ) ),
 			)
 		);
-	}
-
-	public function wpgc_load() {
-		require_once WPGC_PLUGIN_PATH . '/inc/vendor/autoload.php';
-		\Carbon_Fields\Carbon_Fields::boot();
 	}
 
 	public function wpgc_update_option() {
