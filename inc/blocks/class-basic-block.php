@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use function add_action;
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
+use const PHP_INT_MAX;
 use function var_dump;
 use function wp_enqueue_style;
 use function wp_register_style;
@@ -22,7 +23,7 @@ use function wp_register_style;
 class BasicBlock {
 
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'wpgc_basic_block' ) );
+		add_action( 'plugins_loaded', array( $this, 'wpgc_basic_block' ), 500 );
 	}
 
 	public function wpgc_block_fields(){
@@ -129,9 +130,9 @@ class BasicBlock {
 		 * If recaptcha is enabled in options, we add the integration code
 		 */
 
-		$recaptcha_enable = get_option( 'gestsup_recaptcha_enable' );
-		if ( $recaptcha_enable === 'on' && $block['wpgc_recaptcha'] === 'yes' ) {
-			$sitekey = get_option( 'gestsup_recaptcha_site_key' );
+		$recaptcha_enable = get_option( '_wpgc_recaptcha' );
+		if ( $recaptcha_enable === 'yes' && $block['wpgc_recaptcha'] === 'yes' ) {
+			$sitekey = get_option( '_wpgc_recaptcha_sitekey' );
 			$form    .= '<div class="g-recaptcha gestsup-recaptcha" data-sitekey=" ' . $sitekey . ' "></div>';
 		}
 
