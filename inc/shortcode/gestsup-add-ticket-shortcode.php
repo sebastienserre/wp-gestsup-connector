@@ -103,9 +103,9 @@ function add_ticket() {
 	 * If recaptcha is enabled in options, we add the integration code
 	 */
 
-	$recaptcha_enable = get_option( 'gestsup_recaptcha_enable' );
-	if ( $recaptcha_enable == 'on' ) {
-		$sitekey = get_option( 'gestsup_recaptcha_site_key' );
+	$recaptcha_enable = get_option( '_wpgc_recaptcha' );
+	if ( $recaptcha_enable === 'yes' ) {
+		$sitekey = get_option( '_wpgc_recaptcha_sitekey' );
 		$form    .= '<div class="g-recaptcha gestsup-recaptcha" data-sitekey=" ' . $sitekey . ' "></div>';
 	}
 
