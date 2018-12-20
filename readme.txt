@@ -4,7 +4,7 @@ Tags: gestsup, connector, helpdesk, ticket, support
 Donate link: https://www.paypal.me/sebastienserre
 Requires at least: 4.6
 Tested up to: 5.0
-Stable tag: 1.4.2
+Stable tag: 1.5.0
 
 WP GestSup Connector allow you to connect your WordPress Website to the helpdesk GestSup
 
@@ -25,18 +25,24 @@ Add a form to your website allowing your customer to open ticket directly in you
 2. Add the Shortcode [gestsup_add_ticket]
 3. That\'s all!
 
-= May I allow not registred visitor to contact us with the same form? =
+= May I allow not registered visitor to contact us with the same form? =
 yes! Just allow this by checking the box and add a mail address to reach the support team.
 If a registred customer is requesting support, a ticket is directly created in GestSup. if not registred, support team will receive a mail with the details.
 
 = May I use a Recaptcha? =
 Yes! the Google Recaptcha V2 ( invisible and Checkbox ) are allowed.
 
+/!\ New in WP Gestsup Connector 1.5.0 => Add the form with a new editor ( Gutenberg ) Block
+
 == Screenshots ==
 1. GestSup Options
 2. GestSup Shortcode
 
 == Changelog ==
+= 1.5.0 = 20 dec 2018
+* Improve Optioons Page
+* Add a new editor (Gutenberg) Block to add a form.
+
 = 1.4.2 = 12 déc 2018
 * Don't forget the Class!
 
