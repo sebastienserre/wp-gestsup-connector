@@ -13,6 +13,8 @@ WP GestSup Connector allow you to connect your WordPress Website to the helpdesk
 
 Add a form to your website allowing your customer to open ticket directly in your GestSup Helpdesk
 
+/!\ New in WP Gestsup Connector 1.5.0 => Add the form with a new editor ( Gutenberg ) Block
+
 == Installation ==
 1. unzip
 2. upload to wp-content/plugin
@@ -21,6 +23,11 @@ Add a form to your website allowing your customer to open ticket directly in you
 
 == Frequently Asked Questions ==
 = How to add an \"add ticket form\" to my website? =
+
+Use the Gutenberg block
+
+Or use the old Shortcode:
+
 1. Create a page with the name you want.
 2. Add the Shortcode [gestsup_add_ticket]
 3. That\'s all!
@@ -31,8 +38,6 @@ If a registred customer is requesting support, a ticket is directly created in G
 
 = May I use a Recaptcha? =
 Yes! the Google Recaptcha V2 ( invisible and Checkbox ) are allowed.
-
-/!\ New in WP Gestsup Connector 1.5.0 => Add the form with a new editor ( Gutenberg ) Block
 
 == Screenshots ==
 1. GestSup Options
