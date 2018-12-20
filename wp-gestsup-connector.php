@@ -36,8 +36,6 @@ function wpgc_load() {
 /* Include needed files*/
 require_once WPGC_PLUGIN_PATH . '/inc/admin/class-options.php';
 require_once WPGC_PLUGIN_PATH . '/inc/classes/class-gestsup-api.php';
-
-require_once WPGC_PLUGIN_PATH . '/inc/admin/gestsup_options.php';
 require_once WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
 
 require_once WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
