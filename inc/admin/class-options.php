@@ -53,6 +53,8 @@ class Options {
 				              ),
 				         Field::make( 'select', 'wpgc_tech', __( 'By default technician', 'wp-gestsup-connector' ) )
 				              ->set_options( $tech ),
+				         Field::make( 'checkbox', 'wpgc_category', __( 'Use Gestsup Category', 'wp-gestsup-connector' ) )
+				              ->set_option_value( 'yes' ),
 			         )
 
 		         )
