@@ -1,11 +1,14 @@
 <?php
-
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 use Carbon_Fields\Helper\Helper;
 use function add_action;
 use function carbon_get_post_meta;
 use function carbon_get_theme_option;
+
+namespace WPGC\GestSupAPI;
+
+use function array_push;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -18,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GestsupAPI {
 	public function __construct() {
-		add_action( 'init', array( $this, 'gestsup_mysql' ) );
+		add_action( 'plugins_loaded', array( $this, 'gestsup_mysql' ) );
 	}
 
 	/**
@@ -36,7 +39,7 @@ class GestsupAPI {
 			$connect = 'nok';
 		} else {
 
-			$connect = new wpdb( $user, $password, $db, $server );
+			$connect = new \wpdb( $user, $password, $db, $server );
 
 		}
 
@@ -55,6 +58,22 @@ class GestsupAPI {
 		}
 
 	return $techs;
+	}
+
+	/**
+	 * @return mixed
+	 *
+	 */
+	public static function get_categories(){
+		$db   = self::gestsup_mysql();
+		if ( is_object( $db ) ) {
+			$categories = $db->get_results( " SELECT * FROM tcategory ", ARRAY_A );
+			foreach ( $categories as $cat ){
+				$cats[ $cat['id']] = $cat['name'];
+			}
+		}
+		return $cats;
+
 	}
 
 }

@@ -31,16 +31,12 @@ add_action( 'plugins_loaded', 'wpgc_load' );
 function wpgc_load() {
 	require_once WPGC_PLUGIN_PATH . '/inc/vendor/autoload.php';
 	\Carbon_Fields\Carbon_Fields::boot();
+
+	require WPGC_PLUGIN_PATH . '/inc/admin/class-options.php';
+	require WPGC_PLUGIN_PATH . '/inc/classes/class-gestsup-api.php';
+	require WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
+	require WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
 }
-
-/* Include needed files*/
-require_once WPGC_PLUGIN_PATH . '/inc/admin/class-options.php';
-require_once WPGC_PLUGIN_PATH . '/inc/classes/class-gestsup-api.php';
-require_once WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
-
-require_once WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
-
-
 
 
 /**
