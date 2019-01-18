@@ -61,11 +61,11 @@ class BasicBlock {
 			?>
 			<p class="wp-gestsup-cat">
 				<label for="cat"><?php _e( "Category:", 'wp-gestsup-connector' ) ?></label>
-				<select>
+				<select name="cat">
 					<?php
 					foreach ( $cats as $catid => $cat ) {
 						?>
-						<option name="cat" value="<?php echo $catid; ?>"><?php echo $cat; ?></option>
+						<option value="<?php echo $catid; ?>"><?php echo $cat; ?></option>
 						<?php
 					}
 					?>
