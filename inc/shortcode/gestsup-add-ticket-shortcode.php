@@ -131,7 +131,7 @@ function thfo_disable_com() {
 
 function search_mail() {
 	if ( isset( $_POST['add_ticket'] ) && ! empty( $_POST['mail'] ) ) {
-		$v       = gestsup_options::gestsup_mysql();
+		$v       = \WPGC\GestSupAPI\GestsupAPI::gestsup_mysql();
 		$results = $v->get_results( "SELECT * FROM tusers WHERE mail = '$_POST[mail]'" );
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $m ) {
@@ -214,6 +214,7 @@ function add_ticket_db() {
 
 		$ticket     = apply_filters( 'the_content', sanitize_text_field( $_POST['ticket'] ) );
 		$title      = sanitize_text_field( $_POST['title'] );
+		$cat        = sanitize_text_field( $_POST['cat'] );
 		$date       = current_time( 'Y-m-d H:m:s' );
 		$data_users = search_mail();
 		foreach ( $data_users as $data_user ) {
@@ -221,7 +222,7 @@ function add_ticket_db() {
 		}
 		$tech = get_option( 'gestsup_tech' );
 
-		$v = gestsup_options::gestsup_mysql();
+		$v = \WPGC\GestSupAPI\GestsupAPI::gestsup_mysql();
 		$v->insert( 'tincidents',
 			array(
 				'technician'  => $tech,
@@ -233,6 +234,7 @@ function add_ticket_db() {
 				'creator'     => $user,
 				'criticality' => '4',
 				'techread'    => '0',
+				'category'    => $cat,
 
 			) );
 

@@ -3,7 +3,7 @@
 Plugin Name: Gestsup WP Connector
 Plugin URI: http://www.thivinfo.com
 Description: Connect your WordPress site to the helpdesk GestSup
-Version: 1.5.0
+Version: 1.5.1
 Author: Sébastien Serre
 Author URI: http://www.thivinfo.com
 License: GPL2
@@ -21,7 +21,7 @@ use Carbon_Fields\Helper\Helper;
 /**
  * Define Constant
  */
-define( 'WPGC_VERSION', '1.5.0' );
+define( 'WPGC_VERSION', '1.5.1' );
 define( 'WPGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPGC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WPGC_PLUGIN_DIR', untrailingslashit( WPGC_PLUGIN_PATH ) );
@@ -31,17 +31,12 @@ add_action( 'plugins_loaded', 'wpgc_load' );
 function wpgc_load() {
 	require_once WPGC_PLUGIN_PATH . '/inc/vendor/autoload.php';
 	\Carbon_Fields\Carbon_Fields::boot();
+
+	require WPGC_PLUGIN_PATH . '/inc/admin/class-options.php';
+	require WPGC_PLUGIN_PATH . '/inc/classes/class-gestsup-api.php';
+	require WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
+	require WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
 }
-
-/* Include needed files*/
-require_once WPGC_PLUGIN_PATH . '/inc/admin/class-options.php';
-require_once WPGC_PLUGIN_PATH . '/inc/admin/class-admin-widget.php';
-require_once WPGC_PLUGIN_PATH . '/inc/classes/class-gestsup-api.php';
-require_once WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
-
-require_once WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
-
-
 
 
 /**

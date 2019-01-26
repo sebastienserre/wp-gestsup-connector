@@ -25,7 +25,7 @@ class Options {
 	}
 
 	public function wpgc_settings() {
-		$tech = GestsupAPI::wpgc_get_tech();
+		$tech = \WPGC\GestSupAPI\GestsupAPI::wpgc_get_tech();
 		Container::make( 'theme_options', __( 'Gestsup Connector' ) )
 		         ->set_page_parent( 'options-general.php' )
 		         ->add_tab( __( 'General', 'wp-gestsup-connector' ),
@@ -53,6 +53,7 @@ class Options {
 				              ),
 				         Field::make( 'select', 'wpgc_tech', __( 'By default technician', 'wp-gestsup-connector' ) )
 				              ->set_options( $tech ),
+
 			         )
 
 		         )

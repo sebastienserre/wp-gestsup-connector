@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 use function add_action;
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
+use function ob_get_clean;
+use function ob_start;
 use const PHP_INT_MAX;
 use function var_dump;
 use function wp_enqueue_style;
@@ -19,26 +21,28 @@ use function wp_register_style;
  *
  * @package WPGestsup\Blocks\Basic
  */
-
 class BasicBlock {
 
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'wpgc_basic_block' ), 500 );
+		add_action( 'plugins_loaded', array( $this, 'wpgc_basic_block' ), 999 );
 	}
 
-	public function wpgc_block_fields(){
+	public function wpgc_block_fields() {
 		$fields = array();
 
-		$fields[] =  Field::make( 'html', 'crb_html', __( 'Section Description' ) )
-		                  ->set_html( '<p>WP Gestsup Connector Basic Block</p>' );
+		$fields[] = Field::make( 'html', 'crb_html', __( 'Section Description' ) )
+		                 ->set_html( '<p>WP Gestsup Connector Basic Block</p>' );
 
 		$fields[] = Field::make( 'checkbox', 'wpgc_recaptcha', __( 'Show ReCaptcha' ) )
 		                 ->set_option_value( 'yes' );
+		$fields[] = Field::make( 'checkbox', 'wpgc_category', __( 'Use Gestsup Category', 'wp-gestsup-connector' ) )
+		                 ->set_option_value( 'yes' );
+
 		return $fields;
+
 	}
 
-	public function wpgc_basic_block(){
-
+	public function wpgc_basic_block() {
 		$fields = $this->wpgc_block_fields();
 
 		Container::make( 'block', __( 'WP GestSup Connector Basic Block' ) )
@@ -47,8 +51,30 @@ class BasicBlock {
 		         ->set_category( 'custom-category', __( 'Thivinfo\'s block' ), 'smiley' );
 	}
 
-	public function render( $block ){
+	public function render( $block ) {
 		thfo_disable_com();
+
+		// Get Categorie list
+		if ( 'yes' === $block['wpgc_category'] ) {
+			$cats = \WPGC\GestSupAPI\GestsupAPI::get_categories();
+			ob_start();
+			?>
+			<p class="wp-gestsup-cat">
+				<label for="cat"><?php _e( "Category:", 'wp-gestsup-connector' ) ?></label>
+				<select name="cat">
+					<?php
+					foreach ( $cats as $catid => $cat ) {
+						?>
+						<option value="<?php echo $catid; ?>"><?php echo $cat; ?></option>
+						<?php
+					}
+					?>
+				</select>
+			</p>
+			<?php
+			$categories = ob_get_clean();
+		}
+
 		if ( is_user_logged_in() ) {
 			$user_info = wp_get_current_user();
 			$mail      = $user_info->user_email;
@@ -99,7 +125,8 @@ class BasicBlock {
 						for="password"><?php _e( "Choose your password:", 'wp-gestsup-connector' ) ?></label>
 				<input type="password" name="password"></p>
 		<?php } ?>
-		<p class="wp-gestsup-firstname"><label for="firstname"><?php _e( "Firstname:", 'wp-gestsup-connector' ) ?></label>
+		<p class="wp-gestsup-firstname"><label
+					for="firstname"><?php _e( "Firstname:", 'wp-gestsup-connector' ) ?></label>
 			<input type="text" name="firstname" value="<?php echo $firstname; ?>"></p>
 		<p class="wp-gestsup-lastname"><label for="lastname"><?php _e( "lastname:", 'wp-gestsup-connector' ) ?></label>
 			<input type="text" name="lastname" value="<?php echo $lastname; ?>"></p>
@@ -112,6 +139,7 @@ class BasicBlock {
 				<option value="es_ES" <?php selected( 'es_ES', $lang ); ?>><?php _e( "Spanish", 'wp-gestsup-connector' ) ?></option>
 			</select>
 		</p>
+		<?php echo $categories; ?>
 		<p class="wp-gestsup-title">
 			<label for="title"><?php _e( "Title:", 'wp-gestsup-connector' ) ?></label>
 			<input type="text" name="title"/>
@@ -143,6 +171,6 @@ class BasicBlock {
 	}
 
 
-
 }
+
 new BasicBlock();
