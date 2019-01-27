@@ -85,10 +85,10 @@ class GestsupAPI {
 	public static function wpgc_get_state(){
 		$db = self::gestsup_mysql();
 		if ( is_object( $db ) ){
-			$s = $db->get_results( " SELECT * FROM tstates ", ARRAY_A );
-			foreach ( $s as $state ){
+			$states = $db->get_results( " SELECT * FROM tstates ", ARRAY_A );
+			/*foreach ( $s as $state ){
 				$states[ $state['id']] = $state['name'];
-			}
+			}*/
 		}
 		if ( ! empty( $states ) ) {
 			return $states;

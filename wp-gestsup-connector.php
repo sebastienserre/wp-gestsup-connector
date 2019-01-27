@@ -63,4 +63,5 @@ add_action( 'admin_print_styles', 'wpgc_load_style', 11, 1 );
 add_action( 'wp_enqueue_scripts', 'wpgc_load_style', 11, 1 );
 function wpgc_load_style(){
 	wp_enqueue_style( 'wpgc-style', WPGC_PLUGIN_URL . 'inc/blocks/wpgc-style.css' );
+	wp_enqueue_style( 'wpgc-gestsup-ace', WPGC_PLUGIN_URL . 'assets/css/ace.css' );
 }
