@@ -235,3 +235,20 @@
 li.label {
     color: white;
 }
+
+
+.wpgc-dashboard p,
+a.togestsup{
+    margin: 0 5px;
+}
+
+.wpgc-stars{
+    margin: 10px 5px;
+}
+
+a.button.button-primary.togestsup {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: 50%;
+}

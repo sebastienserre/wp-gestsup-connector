@@ -21,8 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package wpgc\gestsupapi
  */
 class GestsupAPI {
+
+	var $db;
+
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'gestsup_mysql' ) );
+		$this->db = self::gestsup_mysql();
 	}
 
 	/**
@@ -108,6 +112,22 @@ class GestsupAPI {
 
 		if ( ! empty( $tickets ) ) {
 			return $tickets;
+		}
+	}
+
+	/**
+	 * @since 1.5.2
+	 * @return mixed
+	 */
+	public static function wpgc_get_parameters(){
+		$db = self::gestsup_mysql();
+		if ( $db ){
+
+			$parameters = $db->get_results( "SELECT * FROM tparameters", ARRAY_A );
+		}
+
+		if ( !empty( $parameters ) ){
+			return $parameters;
 		}
 	}
 
