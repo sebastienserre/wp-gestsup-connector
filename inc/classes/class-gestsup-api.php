@@ -9,6 +9,7 @@ use function carbon_get_theme_option;
 namespace WPGC\GestSupAPI;
 
 use function array_push;
+use function is_object;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -75,6 +76,42 @@ class GestsupAPI {
 		return $cats;
 
 	}
+
+	/**
+	 * @since 1.5.2
+	 * @return mixed
+	 *
+	 */
+	public static function wpgc_get_state(){
+		$db = self::gestsup_mysql();
+		if ( is_object( $db ) ){
+			$s = $db->get_results( " SELECT * FROM tstates ", ARRAY_A );
+			foreach ( $s as $state ){
+				$states[ $state['id']] = $state['name'];
+			}
+		}
+		if ( ! empty( $states ) ) {
+			return $states;
+		}
+	}
+
+	/**
+	 * @since 1.5.2
+	 * @return mixed
+	 *
+	 */
+	public static function wpgc_get_ticket( $state ){
+		$db = self::gestsup_mysql();
+		if ( is_object( $db ) ){
+			$tickets = $db->get_results( "SELECT * FROM tincidents WHERE state LIKE $state AND disable LIKE 0", ARRAY_A );
+		}
+
+		if ( ! empty( $tickets ) ) {
+			return $tickets;
+		}
+	}
+
+
 
 }
 
