@@ -1,0 +1,204 @@
+/* labels & badges */
+.label {
+    border-radius: 0;
+    text-shadow: none;
+    font-weight: normal;
+    background-color: #abbac3 !important;
+}
+.label[class*="col-"][class*="arrow"] {
+    min-height: 0;
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    ::safari-only,
+    .label:empty {
+        display: inline-block;
+    }
+    ::safari-only,
+    .badge:empty {
+        display: inline-block;
+    }
+}
+.badge {
+    text-shadow: none;
+    font-size: 12px;
+    padding-top: 1px;
+    padding-bottom: 3px;
+    font-weight: normal;
+    line-height: 15px;
+    background-color: #abbac3 !important;
+}
+.badge.no-radius {
+    border-radius: 0;
+}
+.badge.radius-1 {
+    border-radius: 1px;
+}
+.badge.radius-2 {
+    border-radius: 2px;
+}
+.badge.radius-3 {
+    border-radius: 3px;
+}
+.badge.radius-4 {
+    border-radius: 4px;
+}
+.badge.radius-5 {
+    border-radius: 5px;
+}
+.badge.radius-6 {
+    border-radius: 6px;
+}
+.label-transparent,
+.badge-transparent {
+    background-color: transparent !important;
+}
+.label-grey,
+.badge-grey {
+    background-color: #a0a0a0 !important;
+}
+.label-info,
+.badge-info {
+    background-color: #3a87ad !important;
+}
+.label-primary,
+.badge-primary {
+    background-color: #428bca !important;
+}
+.label-success,
+.badge-success {
+    background-color: #82af6f !important;
+}
+.label-danger,
+.badge-danger {
+    background-color: #d15b47 !important;
+}
+.label-important,
+.badge-important {
+    background-color: #d15b47 !important;
+}
+.label-inverse,
+.badge-inverse {
+    background-color: #333333 !important;
+}
+.label-warning,
+.badge-warning {
+    background-color: #f89406 !important;
+}
+.label-pink,
+.badge-pink {
+    background-color: #d6487e !important;
+}
+.label-purple,
+.badge-purple {
+    background-color: #9585bf !important;
+}
+.label-yellow,
+.badge-yellow {
+    background-color: #fee188 !important;
+}
+.label-light,
+.badge-light {
+    background-color: #e7e7e7 !important;
+}
+.badge-yellow,
+.label-yellow {
+    color: #996633 !important;
+    border-color: #fee188;
+}
+.badge-light,
+.label-light {
+    color: #888 !important;
+}
+.label.arrowed,
+.label.arrowed-in {
+    position: relative;
+    z-index: 1;
+}
+
+.label.arrowed-right,
+.label.arrowed-in-right {
+    position: relative;
+    z-index: 1;
+}
+
+.label {
+    font-size: 12px;
+    line-height: 1.15;
+    height: 20px;
+}
+.label.arrowed {
+    margin-left: 5px;
+}
+
+.label.arrowed-right:after {
+    right: -10px;
+    border-width: 10px 5px;
+}
+.label.arrowed-in-right {
+    margin-right: 5px;
+}
+
+.label-lg {
+    padding: 0.3em 0.6em 0.4em;
+    font-size: 13px;
+    line-height: 1.1;
+    height: 24px;
+}
+.label-lg.arrowed {
+    margin-left: 6px;
+}
+
+.label-lg.arrowed-in {
+    margin-left: 6px;
+}
+
+.label-lg.arrowed-right {
+    margin-right: 6px;
+}
+
+.label-lg.arrowed-in-right {
+    margin-right: 6px;
+}
+
+.label-xlg {
+    padding: 0.3em 0.7em 0.4em;
+    font-size: 14px;
+    line-height: 1.3;
+    height: 28px;
+}
+.label-xlg.arrowed {
+    margin-left: 7px;
+}
+.label-xlg.arrowed-in {
+    margin-left: 7px;
+}
+
+.label-xlg.arrowed-right {
+    margin-right: 7px;
+}
+
+.label-xlg.arrowed-in-right {
+    margin-right: 7px;
+}
+
+.label-sm {
+    padding: 0.2em 0.4em 0.3em;
+    font-size: 11px;
+    line-height: 1;
+    height: 18px;
+}
+.label-sm.arrowed {
+    margin-left: 4px;
+}
+
+.label-sm.arrowed-in {
+    margin-left: 4px;
+}
+
+.label-sm.arrowed-in-right {
+    margin-right: 4px;
+}
+
+li.label {
+    color: white;
+}
