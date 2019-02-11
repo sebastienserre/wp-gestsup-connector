@@ -14,7 +14,8 @@ function dashboard_widget() {
 	wp_add_dashboard_widget(
 		'gestsup_dashboard_widget',
 		__( 'My GestSup Tickets', 'wp-gestsup-connector' ),
-		'dashboard_render'
+		'dashboard_render',
+		'dashboard_render_handle'
 	);
 }
 
@@ -27,19 +28,23 @@ function dashboard_render() {
 		<ul>
 			<?php
 			foreach ( $states as $state ) {
-				$tickets = GestsupAPI::wpgc_get_ticket( intval( $state['id'] ) );
-				$nb      = sizeof( $tickets );
-				$url     = $parameters[0]['server_url'];
-				if ( 0 == ! $nb ) {
-					ob_start();
-					?>
-					<li class="label label label-sm arrowed arrowed-right arrowed-left <?php echo $state['display']; ?>">
-						<?php echo $state['name'] ?>
-						: <?php printf( _n( '%d  ticket', '%d tickets', $nb, 'wp-gestsup-connector' ), $nb ); ?>
+				$option_name = 'wpgc_admin_dashboard_settings[' . $state['name'] . ']';
+				$option = get_option( $option_name );
+				if (null != $option['state'] ) {
+					$tickets = GestsupAPI::wpgc_get_ticket( intval( $state['id'] ) );
+					$nb      = sizeof( $tickets );
+					$url     = $parameters[0]['server_url'];
+					if ( 0 == ! $nb ) {
+						ob_start();
+						?>
+						<li class="label label label-sm arrowed arrowed-right arrowed-left <?php echo $state['display']; ?>">
+							<?php echo $state['name'] ?>
+							: <?php printf( _n( '%d  ticket', '%d tickets', $nb, 'wp-gestsup-connector' ), $nb ); ?>
 
-					</li>
-					<?php
-					echo ob_get_clean();
+						</li>
+						<?php
+						echo ob_get_clean();
+					}
 				}
 			}
 			?>
@@ -90,4 +95,37 @@ function dashboard_render() {
 		</div>
 	</div>
 	<?php
+}
+
+function dashboard_render_handle(){
+	if( !$widget_options = get_option('wpgc_admin_dashboard_settings')) {
+		$widget_options = array();
+	}
+
+	$states = GestsupAPI::wpgc_get_state();
+
+	?><h3><?php _e('Display these Tickets state:', 'wp-gestsup-connector'); ?></h3>
+	<?php
+	foreach ( $states as $state ){
+		$option_name = 'wpgc_admin_dashboard_settings[' . $state['name'] . ']';
+		$option = get_option( $option_name );
+		$statename = $option['state'] ;
+		if ( $state['name'] === $statename ){
+			$checked = 'checked';
+		}
+		?>
+		<p><input name="<?php echo $option_name; ?>]" type="checkbox" value="<?php echo $state['name']; ?>" <?php echo $checked ?>>
+		<?php echo $state['name'];
+		?>
+		</p>
+			<?php
+		# process update
+		if( isset( $_POST['wpgc_admin_dashboard_settings'] ) ) {
+			$widget_options['state'] = $_POST['wpgc_admin_dashboard_settings'][$state['name']];
+			# save update
+
+			$update = update_option( $option_name, $widget_options );
+		}
+		unset( $checked );
+	}
 }
