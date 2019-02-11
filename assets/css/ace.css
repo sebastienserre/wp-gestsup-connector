@@ -252,3 +252,11 @@ a.button.button-primary.togestsup {
     justify-content: center;
     width: 50%;
 }
+
+/**
+Admin
+ */
+
+#gestsup_dashboard_widget .edit-box {
+    opacity: 1;
+}
