@@ -109,13 +109,9 @@ function dashboard_render_handle() {
 	foreach ( $states as $state ) {
 		$option_name = 'wpgc_admin_dashboard_settings[' . $state['name'] . ']';
 		$option      = get_option( $option_name );
-		$statename   = $option['state'];
-		if ( $state['name'] === $statename ) {
-			$checked = 'checked';
-		}
 		?>
 		<p><input name="<?php echo $option_name; ?>]" type="checkbox"
-		          value="<?php echo $state['name']; ?>" <?php echo $checked ?>>
+		          value="<?php echo $state['name']; ?>" <?php checked($option['state'], $state['name'] ); ?>>
 			<?php echo $state['name'];
 			?>
 		</p>
