@@ -30,11 +30,13 @@ function dashboard_render() {
 			foreach ( $states as $state ) {
 				$option_name = 'wpgc_admin_dashboard_settings[' . $state['name'] . ']';
 				$option      = get_option( $option_name );
-				if ( null != $option['state'] ) {
+				$noticket    = get_option( 'wpgc_admin_dashboard_settings[notickets]' );
+				if ( null !== $option['state'] ) {
 					$tickets = GestsupAPI::wpgc_get_ticket( intval( $state['id'] ) );
 					$nb      = sizeof( $tickets );
-					$url     = $parameters[0]['server_url'];
-					if ( 0 == ! $nb ) {
+
+					$url = $parameters[0]['server_url'];
+					if ( 0 !== $nb || 'yes' === $noticket['state'] ) {
 						ob_start();
 						?>
 						<li class="label label label-sm arrowed arrowed-right arrowed-left <?php echo $state['display']; ?>">
@@ -111,7 +113,7 @@ function dashboard_render_handle() {
 		$option      = get_option( $option_name );
 		?>
 		<p><input name="<?php echo $option_name; ?>]" type="checkbox"
-		          value="<?php echo $state['name']; ?>" <?php checked($option['state'], $state['name'] ); ?>>
+		          value="<?php echo $state['name']; ?>" <?php checked( $option['state'], $state['name'] ); ?>>
 			<?php echo $state['name'];
 			?>
 		</p>
