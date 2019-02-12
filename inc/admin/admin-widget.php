@@ -22,6 +22,7 @@ function dashboard_widget() {
 function dashboard_render() {
 	$states     = GestsupAPI::wpgc_get_state();
 	$parameters = GestsupAPI::wpgc_get_parameters();
+	$user_ID = GestsupAPI::get_user_ID();
 	?>
 	<div class="wpgc-dashboard">
 		<p><?php _e( 'Many Thanks for choosing WP GestSup Connector. You\'ll find below your tickets preview', 'wp-gestsup-connector' ); ?></p>
@@ -36,13 +37,23 @@ function dashboard_render() {
 					$nb      = sizeof( $tickets );
 
 					$url = $parameters[0]['server_url'];
+					$url = add_query_arg(
+							array(
+									'page' => 'dashboard',
+									'userid' => $user_ID,
+									'state' => $state['id'],
+							),
+							$url
+					);
+
 					if ( 0 !== $nb || 'yes' === $noticket['state'] ) {
 						ob_start();
 						?>
 						<li class="label label label-sm arrowed arrowed-right arrowed-left <?php echo $state['display']; ?>">
+							<a href="<?php echo $url; ?>" target="_blank">
 							<?php echo $state['name'] ?>
 							: <?php printf( _n( '%d  ticket', '%d tickets', $nb, 'wp-gestsup-connector' ), $nb ); ?>
-
+							</a>
 						</li>
 						<?php
 						echo ob_get_clean();
@@ -51,8 +62,6 @@ function dashboard_render() {
 			}
 			?>
 		</ul>
-		<a class="button button-primary togestsup"
-		   href="<?php echo $url; ?>"><?php _e( 'Read Tickets on Gestsup', 'wp-gestsup-connector' ); ?></a>
 		<div class="wpgc-stars">
         <span id="wpgc-footer-credits">
                 <span class="dashicons dashicons-wordpress"></span>

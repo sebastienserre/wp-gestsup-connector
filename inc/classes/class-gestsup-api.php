@@ -8,8 +8,14 @@ use function carbon_get_theme_option;
 
 namespace WPGC\GestSupAPI;
 
+use const ARRAY_A;
 use function array_push;
+use function get_current_user_id;
+use function get_currentuserinfo;
+use function get_user_meta;
 use function is_object;
+use function is_user_admin;
+use function is_user_logged_in;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -129,6 +135,19 @@ class GestsupAPI {
 		if ( !empty( $parameters ) ){
 			return $parameters;
 		}
+	}
+
+	public static function get_user_ID(){
+		if ( is_user_logged_in() && is_admin() ){
+			$current_user_data = get_userdata( get_current_user_id() );
+			$current_user_email = $current_user_data->user_email;
+			$db = self::gestsup_mysql();
+			if ( $db ){
+				$gestsup_user_data = $db->get_results( "SELECT * FROM `tusers` WHERE `mail` LIKE '$current_user_email'", ARRAY_A);
+				$user_gestsup_ID = $gestsup_user_data[0]['id'];
+			}
+		}
+		return $user_gestsup_ID;
 	}
 
 
