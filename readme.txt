@@ -4,7 +4,7 @@ Tags: gestsup, connector, helpdesk, ticket, support
 Donate link: https://www.paypal.me/sebastienserre
 Requires at least: 4.6
 Tested up to: 5.0
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 
 WP GestSup Connector allow you to connect your WordPress Website to the helpdesk GestSup
 
@@ -48,8 +48,10 @@ Yes! the Google Recaptcha V2 ( invisible and Checkbox ) are allowed.
 6. Dashboard Widget
 
 == Changelog ==
+= 1.5.3 = 12 feb 2019
+* add settings to admin widget
 
-= 1.5.2 = 27 jan2019
+= 1.5.2 = 27 jan 2019
 * add Admin Widget
 
 = 1.5.1 = 18 jan 2019
