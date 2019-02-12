@@ -29,8 +29,8 @@ function dashboard_render() {
 			<?php
 			foreach ( $states as $state ) {
 				$option_name = 'wpgc_admin_dashboard_settings[' . $state['name'] . ']';
-				$option = get_option( $option_name );
-				if (null != $option['state'] ) {
+				$option      = get_option( $option_name );
+				if ( null != $option['state'] ) {
 					$tickets = GestsupAPI::wpgc_get_ticket( intval( $state['id'] ) );
 					$nb      = sizeof( $tickets );
 					$url     = $parameters[0]['server_url'];
@@ -97,35 +97,53 @@ function dashboard_render() {
 	<?php
 }
 
-function dashboard_render_handle(){
-	if( !$widget_options = get_option('wpgc_admin_dashboard_settings')) {
+function dashboard_render_handle() {
+	if ( ! $widget_options = get_option( 'wpgc_admin_dashboard_settings' ) ) {
 		$widget_options = array();
 	}
 
 	$states = GestsupAPI::wpgc_get_state();
 
-	?><h3><?php _e('Display these Tickets state:', 'wp-gestsup-connector'); ?></h3>
+	?><h3><?php _e( 'Display these Tickets state:', 'wp-gestsup-connector' ); ?></h3>
 	<?php
-	foreach ( $states as $state ){
+	foreach ( $states as $state ) {
 		$option_name = 'wpgc_admin_dashboard_settings[' . $state['name'] . ']';
-		$option = get_option( $option_name );
-		$statename = $option['state'] ;
-		if ( $state['name'] === $statename ){
+		$option      = get_option( $option_name );
+		$statename   = $option['state'];
+		if ( $state['name'] === $statename ) {
 			$checked = 'checked';
 		}
 		?>
-		<p><input name="<?php echo $option_name; ?>]" type="checkbox" value="<?php echo $state['name']; ?>" <?php echo $checked ?>>
-		<?php echo $state['name'];
-		?>
+		<p><input name="<?php echo $option_name; ?>]" type="checkbox"
+		          value="<?php echo $state['name']; ?>" <?php echo $checked ?>>
+			<?php echo $state['name'];
+			?>
 		</p>
-			<?php
+		<?php
 		# process update
-		if( isset( $_POST['wpgc_admin_dashboard_settings'] ) ) {
-			$widget_options['state'] = $_POST['wpgc_admin_dashboard_settings'][$state['name']];
+		if ( isset( $_POST['wpgc_admin_dashboard_settings'] ) ) {
+			$widget_options['state'] = $_POST['wpgc_admin_dashboard_settings'][ $state['name'] ];
 			# save update
 
 			$update = update_option( $option_name, $widget_options );
 		}
 		unset( $checked );
 	}
+
+	$noticket = get_option( 'wpgc_admin_dashboard_settings[notickets]' );
+	?><h3><?php _e( 'Display state without tickets ?', 'wp-gestsup-connector' ); ?></h3>
+	<p>
+		<input name="wpgc_admin_dashboard_settings[notickets]" type="checkbox"
+		       value="yes" <?php checked( $noticket['state'], 'yes' ); ?>> <?php _e( 'Yes', 'wp-gestsup-connector' ); ?>
+	</p>
+	<?php
+
+	# process update
+	if ( isset( $_POST['wpgc_admin_dashboard_settings'] ) ) {
+		$widget_options['state'] = $_POST['wpgc_admin_dashboard_settings']['notickets'];
+		# save update
+
+		$update = update_option( 'wpgc_admin_dashboard_settings[notickets]', $widget_options );
+	}
+
 }
