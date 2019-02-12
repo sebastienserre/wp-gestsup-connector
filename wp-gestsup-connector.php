@@ -37,6 +37,7 @@ function wpgc_load() {
 	require WPGC_PLUGIN_PATH . '/inc/admin/admin-widget.php';
 	require WPGC_PLUGIN_PATH . '/inc/shortcode/gestsup-add-ticket-shortcode.php';
 	require WPGC_PLUGIN_PATH . '/inc/blocks/class-basic-block.php';
+	require WPGC_PLUGIN_PATH . '/inc/helpers.php';
 }
 
 
