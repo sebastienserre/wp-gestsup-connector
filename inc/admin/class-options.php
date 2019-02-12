@@ -26,7 +26,7 @@ class Options {
 
 	public function wpgc_settings() {
 		$tech = \WPGC\GestSupAPI\GestsupAPI::wpgc_get_tech();
-		Container::make( 'theme_options', __( 'Gestsup Connector' ) )
+		Container::make( 'theme_options', 'Gestsup Connector' )
 		         ->set_page_parent( 'options-general.php' )
 		         ->add_tab( __( 'General', 'wp-gestsup-connector' ),
 			         array(
