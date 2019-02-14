@@ -33,6 +33,7 @@ class GestsupAPI {
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'gestsup_mysql' ) );
 		$this->db = self::gestsup_mysql();
+		add_action( 'wp_loaded', array( $this, 'thfo_add_ticket' ) );
 	}
 
 	/**
@@ -148,6 +149,147 @@ class GestsupAPI {
 			}
 		}
 		return $user_gestsup_ID;
+	}
+
+	public function thfo_add_ticket() {
+
+		if ( isset( $_POST['add_ticket'] ) && ! empty( $_POST['mail'] ) ) {
+			/**
+			 * We're checking if Google recaptcha is OK (if enabled in options)
+			 */
+
+			$recaptcha_enable = get_option( 'gestsup_recaptcha_enable' );
+
+			if ( $recaptcha_enable == 'on' ) {
+
+				if ( isset( $_POST['g-recaptcha-response'] ) && ! empty( $_POST['g-recaptcha-response'] ) ) {
+					//your site secret key
+					$secret = get_option( 'gestsup_recaptcha_secret_key' );
+					//get verify response data
+					$verifyResponse = file_get_contents( 'https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . $_POST['g-recaptcha-response'] );
+					$responseData   = json_decode( $verifyResponse );
+					if ( $responseData->success ) {
+						$this->gestsup_check_and_add();
+					} else {
+						add_action( 'gestup-before-form', 'gestsup_recaptcha_error' );
+
+					}
+				}
+
+			} else {
+				$this->gestsup_check_and_add();
+			}
+		}
+
+	}
+
+	public function gestsup_check_and_add() {
+		/**
+		 * Is a GestSup Account exists?
+		 *
+		 * @var $search_mail
+		 */
+		$search_mail = $this->search_mail();
+
+		if ( ! empty( $search_mail ) ) {
+			foreach ( $search_mail as $search ) {
+				if ( $search->mail != $_POST['mail'] ) {
+					/*
+					 * User does'nt exist
+					 */
+					$this->gestsup_create_user();
+
+				} else {
+
+					$this->add_ticket_db();
+
+				}
+			}
+
+		} else {
+			//die('create');
+			$this->gestsup_create_user();
+		}
+	}
+
+	/**
+	 * User is created in gestsup db
+	 */
+	function gestsup_create_user() {
+		$mail      = $_POST['mail'];
+		$passwd    = $_POST['password'];
+		$firstname = $_POST['firstname'];
+		$lastname  = $_POST['lastname'];
+		$lang      = $_POST['lang'];
+		$v         = self::gestsup_mysql();
+		$v->insert( 'tusers',
+			array(
+				'login'     => $mail,
+				'password'  => $passwd,
+				'mail'      => $mail,
+				'lastname'  => $lastname,
+				'firstname' => $firstname,
+				'profile'   => 2,
+				'language'  => $lang,
+			)
+
+		);
+
+		$this->add_ticket_db();
+
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function search_mail() {
+		if ( isset( $_POST['add_ticket'] ) && ! empty( $_POST['mail'] ) ) {
+			$v       = self::gestsup_mysql();
+			$results = $v->get_results( "SELECT * FROM tusers WHERE mail = '$_POST[mail]'" );
+			if ( ! empty( $results ) ) {
+				foreach ( $results as $m ) {
+					$mail = $m->mail;
+					if ( $mail === $_POST['mail'] ) {
+						return $results;
+					}
+				}
+			}
+		}
+	}
+
+	public function add_ticket_db() {
+		if ( isset( $_POST['add_ticket'] ) ) {
+
+			$ticket     = apply_filters( 'the_content', sanitize_text_field( $_POST['ticket'] ) );
+			$title      = sanitize_text_field( $_POST['title'] );
+			$cat        = sanitize_text_field( $_POST['cat'] );
+			$date       = current_time( 'Y-m-d H:m:s' );
+			$data_users = $this->search_mail();
+			foreach ( $data_users as $data_user ) {
+				$user = $data_user->id;
+			}
+			$tech = get_option( 'gestsup_tech' );
+
+			$v = self::gestsup_mysql();
+			$v->insert( 'tincidents',
+				array(
+					'technician'  => $tech,
+					'user'        => $user,
+					'title'       => $title,
+					'description' => $ticket,
+					'state'       => '1',
+					'date_create' => $date,
+					'creator'     => $user,
+					'criticality' => '4',
+					'techread'    => '0',
+					'category'    => $cat,
+
+				) );
+
+		}
+
+		add_action( 'gestup-before-form', 'gestup_ticket_creation_confirmation' );
+
 	}
 
 

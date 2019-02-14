@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Elementor\Settings;
 
 add_shortcode( 'gestsup_add_ticket', 'add_ticket' );
-add_action( 'wp_loaded', 'thfo_add_ticket' );
+
 
 /**
  * Shortcode [gestup_add_ticket]
@@ -129,150 +129,12 @@ function thfo_disable_com() {
 	}
 }
 
-function search_mail() {
-	if ( isset( $_POST['add_ticket'] ) && ! empty( $_POST['mail'] ) ) {
-		$v       = \WPGC\GestSupAPI\GestsupAPI::gestsup_mysql();
-		$results = $v->get_results( "SELECT * FROM tusers WHERE mail = '$_POST[mail]'" );
-		if ( ! empty( $results ) ) {
-			foreach ( $results as $m ) {
-				$mail = $m->mail;
-				if ( $mail === $_POST['mail'] ) {
-					return $results;
-				}
-			}
-		}
-	}
-}
-
-function thfo_add_ticket() {
-
-	if ( isset( $_POST['add_ticket'] ) && ! empty( $_POST['mail'] ) ) {
-		/**
-		 * We're checking if Google recaptcha is OK (if enabled in options)
-		 */
-
-		$recaptcha_enable = get_option( 'gestsup_recaptcha_enable' );
-
-		if ( $recaptcha_enable == 'on' ) {
-
-			if ( isset( $_POST['g-recaptcha-response'] ) && ! empty( $_POST['g-recaptcha-response'] ) ) {
-				//your site secret key
-				$secret = get_option( 'gestsup_recaptcha_secret_key' );
-				//get verify response data
-				$verifyResponse = file_get_contents( 'https://www.google.com/recaptcha/api/siteverify?secret=' . $secret . '&response=' . $_POST['g-recaptcha-response'] );
-				$responseData   = json_decode( $verifyResponse );
-				if ( $responseData->success ) {
-					gestsup_check_and_add();
-				} else {
-					add_action( 'gestup-before-form', 'gestsup_recaptcha_error' );
-
-				}
-			}
-
-		} else {
-			gestsup_check_and_add();
-		}
-	}
-
-}
 
 function gestsup_recaptcha_error() {
 	echo '<div class="error gestsup-recaptcha">' . __( 'An Error Occured with Recaptcha', 'wp-gestsup-connector' ) . '</div>';
 }
 
-function gestsup_check_and_add() {
-	/**
-	 * Is a GestSup Account exists?
-	 *
-	 * @var $search_mail
-	 */
-	$search_mail = search_mail();
-
-	if ( ! empty( $search_mail ) ) {
-		foreach ( $search_mail as $search ) {
-			if ( $search->mail != $_POST['mail'] ) {
-				/*
-				 * User does'nt exist
-				 */
-				gestsup_create_user();
-
-			} else {
-
-				add_ticket_db();
-
-			}
-		}
-
-	} else {
-		//die('create');
-		gestsup_create_user();
-	}
-}
-
-function add_ticket_db() {
-	if ( isset( $_POST['add_ticket'] ) ) {
-
-		$ticket     = apply_filters( 'the_content', sanitize_text_field( $_POST['ticket'] ) );
-		$title      = sanitize_text_field( $_POST['title'] );
-		$cat        = sanitize_text_field( $_POST['cat'] );
-		$date       = current_time( 'Y-m-d H:m:s' );
-		$data_users = search_mail();
-		foreach ( $data_users as $data_user ) {
-			$user = $data_user->id;
-		}
-		$tech = get_option( 'gestsup_tech' );
-
-		$v = \WPGC\GestSupAPI\GestsupAPI::gestsup_mysql();
-		$v->insert( 'tincidents',
-			array(
-				'technician'  => $tech,
-				'user'        => $user,
-				'title'       => $title,
-				'description' => $ticket,
-				'state'       => '1',
-				'date_create' => $date,
-				'creator'     => $user,
-				'criticality' => '4',
-				'techread'    => '0',
-				'category'    => $cat,
-
-			) );
-
-	}
-
-	add_action( 'gestup-before-form', 'gestup_ticket_creation_confirmation' );
-
-}
-
 function gestup_ticket_creation_confirmation() {
 	echo '<div class="success ticket-creation">' . __( 'Your Ticket is Succesfully Created', 'wp-gestsup-connector' ) . '</div>';
-
-}
-
-
-/**
- * User is created in gestsup db
- */
-function gestsup_create_user() {
-	$mail      = $_POST['mail'];
-	$passwd    = $_POST['password'];
-	$firstname = $_POST['firstname'];
-	$lastname  = $_POST['lastname'];
-	$lang      = $_POST['lang'];
-	$v         = gestsup_options::gestsup_mysql();
-	$v->insert( 'tusers',
-		array(
-			'login'     => $mail,
-			'password'  => $passwd,
-			'mail'      => $mail,
-			'lastname'  => $lastname,
-			'firstname' => $firstname,
-			'profile'   => 2,
-			'language'  => $lang,
-		)
-
-	);
-
-	add_ticket_db();
 
 }
