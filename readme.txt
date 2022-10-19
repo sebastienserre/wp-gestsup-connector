@@ -4,7 +4,7 @@ Tags: gestsup, connector, helpdesk, ticket, support
 Donate link: https://www.paypal.me/sebastienserre
 Requires at least: 4.6
 Tested up to: 5.0
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 
 WP GestSup Connector allow you to connect your WordPress Website to the helpdesk GestSup
 

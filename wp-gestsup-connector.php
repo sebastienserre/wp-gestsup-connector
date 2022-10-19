@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Gestsup WP Connector
-Plugin URI: http://www.thivinfo.com
+Plugin URI: http://thivinfo.com
 Description: Connect your WordPress site to the helpdesk GestSup
-Version: 1.5.4
+Version: 1.5.5
 Author: Sébastien Serre
-Author URI: http://www.thivinfo.com
+Author URI: http://thivinfo.com
 License: GPL2
 Text Domain: wp-gestsup-connector
 */
@@ -21,11 +21,13 @@ use Carbon_Fields\Helper\Helper;
 /**
  * Define Constant
  */
-define( 'WPGC_VERSION', '1.5.4' );
-define( 'WPGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'WPGC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'WPGC_PLUGIN_DIR', untrailingslashit( WPGC_PLUGIN_PATH ) );
-
+add_action( 'plugins_loaded', 'wpgc_define' );
+function wpgc_define() {
+	define( 'WPGC_VERSION', '1.5.5' );
+	define( 'WPGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+	define( 'WPGC_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+	define( 'WPGC_PLUGIN_DIR', untrailingslashit( WPGC_PLUGIN_PATH ) );
+}
 
 add_action( 'plugins_loaded', 'wpgc_load' );
 function wpgc_load() {
