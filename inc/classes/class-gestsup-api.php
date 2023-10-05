@@ -1,12 +1,12 @@
 <?php
+namespace WPGC\GestSupAPI;
+
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 use Carbon_Fields\Helper\Helper;
 use function add_action;
 use function carbon_get_post_meta;
 use function carbon_get_theme_option;
-
-namespace WPGC\GestSupAPI;
 
 use const ARRAY_A;
 use function array_push;
