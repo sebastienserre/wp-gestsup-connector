@@ -1,5 +1,4 @@
 <?php
-
 use WPGC\GestSupAPI\GestsupAPI;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -34,7 +33,12 @@ function dashboard_render() {
 				$noticket    = get_option( 'wpgc_admin_dashboard_settings[notickets]' );
 				if ( null !== $option['state'] ) {
 					$tickets = GestsupAPI::wpgc_get_ticket( intval( $state['id'] ) );
-					$nb      = sizeof( $tickets );
+					
+					if (is_array($tickets)) {
+    						$nb = sizeof($tickets);
+					} else {
+    						$nb = 0; // Set a default value if $tickets is not an array
+					}
 
 					$url = $parameters[0]['server_url'];
 					$url = add_query_arg(
