@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly.
 
-
 add_action( 'wp_dashboard_setup', 'dashboard_widget' );
 
 
