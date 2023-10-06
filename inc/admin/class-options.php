@@ -1,9 +1,4 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly.
-
-
 use function add_action;
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
@@ -11,6 +6,10 @@ use Carbon_Fields\Helper\Helper;
 use function delete_option;
 use GestsupAPI;
 use function get_option;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly.
 
 /**
  * Class Options
